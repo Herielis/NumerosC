@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Números Complejos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .column input {
+            width: 50px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .column select {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .resultado {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .historial {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Números Complejos</h1>
+        <div class="row">
+            <div class="column">
+                <label>Número 1</label>
+                <input type="number" id="real1" placeholder="0">
+                <input type="number" id="imag1" placeholder="0">
+            </div>
+            <div class="column">
+                <label>Operador</label>
+                <select id="operador">
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+            </div>
+            <div class="column">
+                <label>Número 2</label>
+                <input type="number" id="real2" placeholder="0">
+                <input type="number" id="imag2" placeholder="0">
+            </div>
+        </div>
+        <button onclick="calcular()">Calcular</button>
+        <div class="resultado">
+            <h3>Resultado</h3>
+            <p id="resultado-real">0</p>
+            <p id="resultado-imag">0</p>
+        </div>
+        <div class="historial">
+            <h3>Historial</h3>
+            <ul id="historial"></ul>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            const real1 = parseFloat(document.getElementById('real1').value) || 0;
+            const imag1 = parseFloat(document.getElementById('imag1').value) || 0;
+            const real2 = parseFloat(document.getElementById('real2').value) || 0;
+            const imag2 = parseFloat(document.getElementById('imag2').value) || 0;
+            const operador = document.getElementById('operador').value;
+
+            let resultadoReal = 0;
+            let resultadoImag = 0;
+
+            if (operador === '+') {
+                resultadoReal = real1 + real2;
+                resultadoImag = imag1 + imag2;
+            } else if (operador === '-') {
+                resultadoReal = real1 - real2;
+                resultadoImag = imag1 - imag2;
+            } else if (operador === '*') {
+                resultadoReal = real1 * real2 - imag1 * imag2;
+                resultadoImag = real1 * imag2 + imag1 * real2;
+            } else if (operador === '/') {
+                const divisor = real2 * real2 + imag2 * imag2;
+                if (divisor !== 0) {
+                    resultadoReal = (real1 * real2 + imag1 * imag2) / divisor;
+                    resultadoImag = (imag1 * real2 - real1 * imag2) / divisor;
+                } else {
+                    alert('No se puede dividir entre 0.');
+                    return;
+                }
+            }
+
+            document.getElementById('resultado-real').textContent = `Parte Real: ${resultadoReal}`;
+            document.getElementById('resultado-imag').textContent = `Parte Imaginaria: ${resultadoImag}`;
+
+            const historial = document.getElementById('historial');
+            const nuevoHistorial = document.createElement('li');
+            nuevoHistorial.textContent = `${real1} + ${imag1}i ${operador} ${real2} + ${imag2}i = ${resultadoReal} + ${resultadoImag}i`;
+            historial.appendChild(nuevoHistorial);
+        }
+    </script>
+</body>
+</html>
